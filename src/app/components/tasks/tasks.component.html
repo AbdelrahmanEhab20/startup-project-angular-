@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+          Hello  {{name}} , your pending tasks is <span class="bg-danger">{{getPendingTasksCount()}}</span>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <input type="text" #inputTitle (keyup.enter)="add(inputTitle.value)" placeholder="enter your task" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary"  (click)="add(inputTitle.value)" >Add</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Date</th>
+
+                        <th scope="col">Status</th>
+
+                        <th scope="col">Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngIf="!isPageLoaded">
+                        <td colspan="4">
+                           Loading data .............
+                        </td>
+                       </tr>
+                        <tr *ngIf="isPageLoaded && tasks.length==0">
+                           <td colspan="4">
+                               no tasks found
+                           </td>
+                          </tr>
+
+                      <tr *ngFor="let task of tasks;let currentIndex=index">
+                        <th scope="row">{{currentIndex+1}}</th>
+                        <td [class.task-done]="task.IsDone">
+                          <!-- <a [routerLink]="['/tasks/details'task.ID]">  {{task.Title}}</a> -->
+                          <a routerLink="/tasks/details/{{task.ID}}">
+                         {{task.Title | uppercase | maxLength:10}}
+                          </a>
+                         </td>
+                         <td>
+                           {{task.CreatedDate | date : 'dd-MM-yyyy HH:mm'}}
+                         </td>
+                        <td> 
+                            <input type="checkbox" [value]="task.IsDone" (change)="update(task)">
+                        </td>
+                        <td>
+                            <button [disabled]="task.IsDeleting" class="btn btn-danger" (click)="delete(currentIndex)">DELETE</button>
+                        </td>
+                      </tr>
+                      
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+      </div>
+</div>
